@@ -110,7 +110,7 @@ export const Sidebar: React.FC = () => {
           <span>Log Viewer</span>
         </Link>
         <a
-          href="http://127.0.0.1:8000/api/health"
+          href="/api/health"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 px-3 py-2.5 text-xs text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl border border-slate-800/30 transition-all duration-300 select-none"

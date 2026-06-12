@@ -1,4 +1,5 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '';
+const AGENT_API_KEY = process.env.NEXT_PUBLIC_AGENT_API_KEY || "dev-key-change-me";
 
 export interface RunSummary {
   file: string;
@@ -34,14 +35,24 @@ export interface TranscriptSummary {
 }
 
 export async function fetchRuns(): Promise<RunSummary[]> {
-  const res = await fetch(`${API_BASE}/api/logs/runs`, { cache: 'no-store' });
+  const res = await fetch(`${API_BASE}/api/logs/runs`, {
+    cache: 'no-store',
+    headers: {
+      "X-API-Key": AGENT_API_KEY
+    }
+  });
   if (!res.ok) throw new Error(`Failed to fetch runs: ${res.status}`);
   const data = await res.json();
   return data.runs ?? [];
 }
 
 export async function fetchTranscripts(): Promise<TranscriptSummary[]> {
-  const res = await fetch(`${API_BASE}/api/logs/transcripts`, { cache: 'no-store' });
+  const res = await fetch(`${API_BASE}/api/logs/transcripts`, {
+    cache: 'no-store',
+    headers: {
+      "X-API-Key": AGENT_API_KEY
+    }
+  });
   if (!res.ok) throw new Error(`Failed to fetch transcripts: ${res.status}`);
   const data = await res.json();
   return data.transcripts ?? [];
@@ -49,7 +60,12 @@ export async function fetchTranscripts(): Promise<TranscriptSummary[]> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchLogDetail(file: string): Promise<any> {
-  const res = await fetch(`${API_BASE}/api/logs/detail?file=${encodeURIComponent(file)}`, { cache: 'no-store' });
+  const res = await fetch(`${API_BASE}/api/logs/detail?file=${encodeURIComponent(file)}`, {
+    cache: 'no-store',
+    headers: {
+      "X-API-Key": AGENT_API_KEY
+    }
+  });
   if (!res.ok) throw new Error(`Failed to fetch log detail: ${res.status}`);
   return res.json();
 }

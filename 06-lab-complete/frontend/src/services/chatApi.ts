@@ -1,6 +1,7 @@
 import { ChatResponse, Message } from "../types/chat";
 
 const API_BASE = "/api";
+const AGENT_API_KEY = process.env.NEXT_PUBLIC_AGENT_API_KEY || "dev-key-change-me";
 
 export async function sendChatMessage(
   messages: Message[],
@@ -19,7 +20,8 @@ export async function sendChatMessage(
   const response = await fetch(`${API_BASE}/chat`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "X-API-Key": AGENT_API_KEY
     },
     body: JSON.stringify(payload)
   });
