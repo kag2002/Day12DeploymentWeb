@@ -21,4 +21,4 @@ RUN npm run build
 ENV HOSTNAME="0.0.0.0"
 
 # Run the app
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npx next start -p ${PORT:-3000}"]
