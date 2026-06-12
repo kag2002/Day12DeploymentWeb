@@ -60,7 +60,8 @@ Client
 ## Part 3: Cloud Deployment
 
 ### Exercise 3.1: Railway deployment
-- **URL**: https://chatbotsearchweb-production.up.railway.app
+- **Frontend App URL**: https://day12-frontend-production.up.railway.app
+- **Backend API URL**: https://chatbotsearchweb-production.up.railway.app
 - **Screenshot**: [Link to screenshot trong repo hoặc cập nhật screenshots/dashboard.png]
 
 ### Exercise 3.2: Railway vs Render config files

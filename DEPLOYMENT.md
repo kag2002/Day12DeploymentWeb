@@ -1,7 +1,8 @@
 # Deployment Information
 
-## Public URL
-https://chatbotsearchweb-production.up.railway.app
+## Public URLs
+- **Frontend App**: https://day12-frontend-production.up.railway.app
+- **Backend API**: https://chatbotsearchweb-production.up.railway.app
 
 ## Platform
 Railway
