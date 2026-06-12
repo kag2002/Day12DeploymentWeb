@@ -463,7 +463,7 @@ def main():
     parser.add_argument("--provider", choices=["openrouter", "openai", "anthropic", "gemini"], default="openrouter")
     parser.add_argument("--model", default=None)
     parser.add_argument("--version", default="v3", help="Student-chosen artifact version label, e.g. v3.")
-    parser.add_argument("--host", default="127.0.0.1", help="Host to bind the server to.")
+    parser.add_argument("--host", default="0.0.0.0", help="Host to bind the server to.")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     
@@ -472,10 +472,15 @@ def main():
     VERSION_LABEL = os.environ.get("VERSION_LABEL") or args.version
     MODEL_NAME = args.model or os.environ.get("MODEL_NAME")
     
-    print(f"Starting Research Agent Server on {args.host}:{args.port}...")
+    # Read host and port from environment variables dynamically (vital for Railway)
+    host = os.environ.get("HOST") or args.host
+    port_str = os.environ.get("PORT")
+    port = int(port_str) if port_str else args.port
+    
+    print(f"Starting Research Agent Server on {host}:{port}...")
     print(f"Provider: {PROVIDER_NAME}, Version: {VERSION_LABEL}, Model: {MODEL_NAME or 'default'}")
     
-    uvicorn.run("server:app", host=args.host, port=args.port, reload=True)
+    uvicorn.run("app.main:app", host=host, port=port, reload=False)
 
 if __name__ == "__main__":
     main()
