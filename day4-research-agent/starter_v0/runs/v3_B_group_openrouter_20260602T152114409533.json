@@ -1,0 +1,725 @@
+{
+  "run_id": "v3_B_group_openrouter_20260602T152114409533",
+  "version": "v3",
+  "artifact_version": "v3+pf933ea04520c+tc3175e01710f",
+  "prompt_hash": "f933ea04520cf43af9cc8888e562e1ec1fc2eb366abd7b919f862ff3889beb76",
+  "tools_hash": "c3175e01710fa9de1dd5479e3d2f791edf0a6005b7127be3bdb0ddc7f70841ef",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Admin\\Documents\\VinUni\\CodeLab\\Day4\\Day04-C401-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Admin\\Documents\\VinUni\\CodeLab\\Day4\\Day04-C401-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-06-02T15:21:14",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.9,
+    "tool_routing_accuracy": 0.9,
+    "argument_accuracy": 0.9,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "wrong_tool": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "G01_weather_hanoi",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Weather query for specific city → calls weather tool with location='Hanoi'."
+      },
+      "input": "Thời tiết Hà Nội hôm nay thế nào?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "weather",
+            "args": {
+              "location": "Hanoi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "weather",
+            "args": {
+              "location": "Hanoi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "weather",
+          "args": {
+            "location": "Hanoi"
+          },
+          "result": {
+            "tool": "weather",
+            "location": "Hanoi",
+            "weather_info": "hanoi: 🌤️  +35°C"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_weather_missing_location",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Weather query with missing city/location → calls clarify tool."
+      },
+      "input": "Thời tiết hôm nay thế nào?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn kiểm tra thời tiết ở thành phố nào?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn kiểm tra thời tiết ở thành phố nào?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn kiểm tra thời tiết ở thành phố nào?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Cooking recipe is out of scope → refuses and calls no tools."
+      },
+      "input": "Cách làm bánh mì Việt Nam giòn ngon tại nhà.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, nhưng tôi không thể giúp bạn với yêu cầu này. Tôi chỉ có thể hỗ trợ với các tìm kiếm trên web, thông tin thời tiết, mạng xã hội và nghiên cứu. Nếu bạn cần tìm kiếm công thức làm bánh mì Việt Nam, tôi có thể giúp bạn tìm thông tin trên internet. Bạn có muốn tôi tìm kiếm không?",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G04_confirm_send_telegram",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Write action request without confirmation → calls clarify with response_type='yes_no'."
+      },
+      "input": "Gửi báo cáo này lên kênh Telegram của nhóm.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_search_tweets_latest",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Latest tweets query → calls social_search with query='OpenAI' and search_type='Latest'."
+      },
+      "input": "Các tweet mới nhất nói về OpenAI",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Latest"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Latest"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "OpenAI",
+            "search_type": "Latest"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "OpenAI",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "📅 Tuesday Sector Spotlight:",
+                "summary": "📅 Tuesday Sector Spotlight:\n\nAI tokens are making noise today. $OPENAI is trending on CoinPaprika alongside infrastructure plays like $LAB and $SKYAI.\n\nWhile macro sits in Extreme Fear (23), AI-adjacent coins are bucking the trend. The narrative stays strong — keep this sector on your radar.\n\n👉 Full daily data: https://t.co/Ahj6XWyODk\n\n#Crypto #Bitcoin #CoinPaprika #Web3",
+                "url": "https://x.com/coinpaprika/status/2061724623259967651",
+                "source": "@coinpaprika",
+                "date": "Tue Jun 02 08:20:29 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "1"
+                }
+              },
+              {
+                "title": "ChatGPT Codex 手机号二次验证的解决办法",
+                "summary": "ChatGPT Codex 手机号二次验证的解决办法\n终极解决办法：OpenAI key 登录",
+                "url": "https://x.com/shinning1314/status/2061724600275447872",
+                "source": "@shinning1314",
+                "date": "Tue Jun 02 08:20:24 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              },
+              {
+                "title": "@dkwon98 $380B ARM stake + OpenAI exposure + entire business = should trade at premium, not discount.",
+                "summary": "@dkwon98 $380B ARM stake + OpenAI exposure + entire business = should trade at premium, not discount.\n\nThe market is treating their conglomerate structure as a liability when it's actually diversified upside.",
+                "url": "https://x.com/tonitrades_/status/2061724567819694085",
+                "source": "@tonitrades_",
+                "date": "Tue Jun 02 08:20:16 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "New York Times",
+                "summary": "New York Times\n\nKaliforniya'nın devlet üniversiteleri yapay zekâya yöneldi, sistem içinde büyük tartışma başladı\n\n🔹 Kaliforniya Eyalet Üniversitesi (CSU) sistemi, 2025 yılında OpenAI ile 16,9 milyon dolarlık anlaşma yaparak 500 bin https://t.co/aW9htt9luN lisansı satın aldı.\n\n🔹 Program, 22 kampüsten oluşan ve eyaletteki her 10 çalışandan birini eğiten CSU sistemini \"yapay zekâ destekli ilk büyük devlet üniversitesi sistemi\" haline getirmeyi amaçladı.\n\n🔹 San Jose State Üniversitesi, \"AI Everywhere\" programı kapsamında yapay zekâ kütüphanecisi, yapay zekâ merkezi ve yapay zekâ destekli öğrenci hizmetleri oluşturdu.\n\nYapay Zekâ ve İş Gücü Hedefi\n\n🔹 Kaliforniya yönetimi Nvidia, Adobe, Google, IBM ve Microsoft ile eğitim alanında yapay zekâ iş birlikleri başlattı.\n\n🔹 Amaç, öğrencileri geleceğin yapay zekâ ekonomisine hazırlamak ve iş gücü ihtiyaçlarına uyum sağlamak olarak açıklandı.\n\n🔹 CSU öğrencilerinin önemli bölümü ilk nesil üniversite öğrencilerinden ve göçmen ailelerden oluşuyor.\n\nMali Kriz ve Tepkiler\n\n🔹 Yapay zekâ girişimi, CSU sisteminin 2,3 milyar dolarlık bütçe açığıyla karşı karşıya olduğu dönemde başlatıldı.\n\n🔹 Mali sıkıntılar nedeniyle öğretim üyeleri işten çıkarıldı, bazı bölümler kapatıldı ve öğrenim ücretleri yüzde 6 artırıldı.\n\n🔹 Çok sayıda akademisyen, bütçe kesintileri sürerken milyonlarca doların OpenAI'a aktarılmasını eleştirdi.\n\nAkademik Tartışmalar\n\n🔹 Öğretim üyeleri yapay zekânın eğitim kalitesine etkisi konusunda farklı görüşler benimsedi.\n\n🔹 Bazı akademisyenler ChatGPT tabanlı eğitim araçlarını derslerde kullanmaya başladı.\n\n🔹 Bazıları ise yapay zekâyı öğrencilerin eleştirel düşünme ve yazma becerilerine tehdit olarak gördü.\n\n🔹 San Francisco State Üniversitesi'ndeki bazı öğretim üyeleri OpenAI anlaşmasına karşı kampanya yürüttü.\n\nÖğrenciler Arasında Bölünme\n\n🔹 Bazı öğrenciler yapay zekâyı kariyer fırsatı olarak değerlendirirken bazıları eğitim üzerindeki etkileri nedeniyle karşı çıktı.\n\n🔹 Öğrenci grupları, üniversitenin yapay zekâ politikalarında daha fazla söz hakkı talep etti.\n\n🔹 Bazı öğrenciler derslerde yapay zekâ kullanımının zorunlu tutulmamasını istedi.\n\n🔹 Üniversite genelinde dağıtılan ChatGPT lisanslarının yaklaşık yarısının aktif kullanılmadığı belirtildi.\n\nOpenAI'ın Rolü\n\n🔹 OpenAI, kampüs elçisi programlarıyla öğrenciler arasında ChatGPT kullanımını teşvik etti.\n\n🔹 CSU anlaşması, OpenAI'ın eğitim alanındaki en büyük ortaklıklarından biri haline geldi.\n\n🔹 Benzer anlaşmalar Arizona State University, South Carolina Üniversitesi ve Colorado Üniversitesi ile de yapıldı.\n\nYeni Anlaşma\n\n🔹 CSU yönetimi mayıs ayında OpenAI ile üç yıllık yeni bir anlaşma imzaladığını duyurdu.\n\n🔹 Yeni anlaşmanın değeri 13 milyon dolar olarak açıklandı.\n\n🔹 Mezun öğrenciler, diplomalarını aldıktan sonra bir yıl daha https://t.co/aW9htt9luN erişimini sürdürebilecek.\n\n🔹 Üniversite yönetimi öğrencilere ChatGPT dışındaki yapay zekâ platformlarına da erişim sağlanacağını açıkladı.\n\n🔹 Yapay zekânın eğitim üzerindeki uzun vadeli etkilerinin ise hâlâ belirsizliğini koruduğu belirtildi.",
+                "url": "https://x.com/yabancibasin/status/2061724553122816038",
+                "source": "@yabancibasin",
+                "date": "Tue Jun 02 08:20:13 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "2"
+                }
+              },
+              {
+                "title": "背景がポイント。Claude Codeに開発者シェアを持っていかれたMicrosoftが自社モデルで対抗する意図があって、OpenAIへの依存を意図的に下げてきてる。ここが一番やばい",
+                "summary": "背景がポイント。Claude Codeに開発者シェアを持っていかれたMicrosoftが自社モデルで対抗する意図があって、OpenAIへの依存を意図的に下げてきてる。ここが一番やばい",
+                "url": "https://x.com/PiClaudeCode/status/2061724538510155951",
+                "source": "@PiClaudeCode",
+                "date": "Tue Jun 02 08:20:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "11"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_multiturn_weather_clarify",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "2 turns: carry weather request, receive location in turn 2, map 'thành phố Hồ Chí Minh' to location."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Cho mình xem thời tiết hôm nay"
+        },
+        {
+          "role": "user",
+          "content": "Ở thành phố Hồ Chí Minh nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "weather",
+            "args": {
+              "location": "Ho Chi Minh City"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "weather",
+            "args": {
+              "location": "Ho Chi Minh City"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "weather",
+          "args": {
+            "location": "Ho Chi Minh City"
+          },
+          "result": {
+            "tool": "weather",
+            "location": "Ho Chi Minh City",
+            "weather_info": "ho chi minh city: ⛈️  +31°C"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_multiturn_weather_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "2 turns: correct location Đà Nẵng -> Hà Nội (Hanoi) for weather tool."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Thời tiết ở Đà Nẵng thế nào?"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, cho mình xem thời tiết ở Hà Nội nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "weather",
+            "args": {
+              "location": "Hanoi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "weather",
+            "args": {
+              "location": "Hanoi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "weather",
+          "args": {
+            "location": "Hanoi"
+          },
+          "result": {
+            "tool": "weather",
+            "location": "Hanoi",
+            "weather_info": "hanoi: 🌤️  +35°C"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_multiturn_switch_weather_to_tweets",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "2 turns: explicitly stop weather, switch to timeline of Sam Altman."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Thời tiết Hà Nội hôm nay ra sao?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi không xem thời tiết nữa, tìm tweet của Sam Altman đi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Sam Altman",
+              "search_type": "Latest",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call timeline",
+          "extra tool call social_search"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Sam Altman",
+            "search_type": "Latest",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Sam Altman",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "🤖 Silicon Valley is shifting focus from digital reasoning to physical automation.",
+                "summary": "🤖 Silicon Valley is shifting focus from digital reasoning to physical automation.\n\nSam Altman is backing stealth startup Alfred to accelerate robotics and vehicle manufacturing software.\n\nhttps://t.co/2ZUb8CIjY2\n\n@iEnviroAust #AI #Robotics #TechNews https://t.co/2223eAvZ4z",
+                "url": "https://x.com/MikeyJNicholls/status/2061724581790925295",
+                "source": "@MikeyJNicholls",
+                "date": "Tue Jun 02 08:20:19 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "Florida just sued OpenAI and Sam Altman over a campus shooting — the first state-level AI lawsuit of its kind. The claim",
+                "summary": "Florida just sued OpenAI and Sam Altman over a campus shooting — the first state-level AI lawsuit of its kind. The claim: ChatGPT played a role in what happened at FSU.",
+                "url": "https://x.com/24AInor/status/2061723583655665861",
+                "source": "@24AInor",
+                "date": "Tue Jun 02 08:16:21 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "11"
+                }
+              },
+              {
+                "title": "1/6",
+                "summary": "1/6\nLa Floride poursuit OpenAI et Sam Altman.\nJe pense qu’il faut parler de l’IA avec responsabilité — mais sans tomber dans une peur aveugle.\nUne plainte n’est pas un jugement. Et une technologie n’est pas mauvaise simplement parce qu’elle peut être détournée.",
+                "url": "https://x.com/roy_schneemann/status/2061723057090158840",
+                "source": "@roy_schneemann",
+                "date": "Tue Jun 02 08:14:16 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "2"
+                }
+              },
+              {
+                "title": "フロリダ州がOpenAIとSam Altmanを個人で提訴したんだけど。AIの安全性で州が訴えるの全米初。83ページ11件の訴状。まとめると↓ https://t.co/tAOfiGvU07",
+                "summary": "フロリダ州がOpenAIとSam Altmanを個人で提訴したんだけど。AIの安全性で州が訴えるの全米初。83ページ11件の訴状。まとめると↓ https://t.co/tAOfiGvU07",
+                "url": "https://x.com/PiClaudeCode/status/2061722765955379674",
+                "source": "@PiClaudeCode",
+                "date": "Tue Jun 02 08:13:07 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "7"
+                }
+              },
+              {
+                "title": "1/6",
+                "summary": "1/6\nFlorida is suing OpenAI and Sam Altman.\nI believe we should talk about AI responsibly — but not fall into blind fear.\nA lawsuit is not a verdict. And a technology is not evil simply because it can be misused.",
+                "url": "https://x.com/roy_schneemann/status/2061722530830786831",
+                "source": "@roy_schneemann",
+                "date": "Tue Jun 02 08:12:10 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_multiturn_clarify_then_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "2 turns: user confirms the yes_no prompt in turn 2 → calls send with confirmed=true."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin này lên Telegram"
+        },
+        {
+          "role": "user",
+          "content": "Đồng ý, gửi đi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "Đăng bản tin này lên Telegram",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "Đăng bản tin này lên Telegram",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_multiturn_out_of_scope_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "2 turns: start with out of scope coding query, switch to valid URL fetch query in turn 2."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Viết giúp mình một hàm Python tính Fibonacci"
+        },
+        {
+          "role": "user",
+          "content": "À, ý mình là tìm bài viết này trên web: https://openai.com/blog"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://openai.com/blog"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://openai.com/blog",
+            "items": [
+              {
+                "title": "OpenAI News | OpenAI",
+                "url": "https://openai.com/blog",
+                "source": "openai.com",
+                "summary": "OpenAI News \\| OpenAI\n\n## All\n\n* * *\n\nFilter\nSort\n\nSwitch cards to show Media\n\nSwitch cards to hide Media\n\n![Open AI > AWS > Card Img](https://images.ctfassets.net/kftzwdyauwt9/4DyPHqWFzvKSbt5XNS0cCb/4b5da512c5bc9d6950c64d3ab2b85126/OAI_AWS_Partnership_1x1_Art_Card.png?w=3840&q=90&fm=webp)\n\n[OpenAI frontier models and Codex are now available on AWS\\\\\n\\\\\nProductJun 1, 2026](https://openai.com/index/openai-frontier-models-and-codex-are-now-available-on-aws/)\n\n![1x1](https://images.ctfassets.net/kftzwdyauwt9/6ui4uYfTTbR4xbiFRcqEfo/81d973f14bea720820f692271f6c6834/square.png?w=3840&q=90&fm=webp)\n\n[Strengthening societal resilience with Rosalind Biodefense\\\\\n\\\\\nProductMay 29, 2026](https://openai.com/index/strengthening-societal-resilience-with-rosalind-biodefense/)\n\n![Technical foundations > Art Card](https://images.ctfassets.net/kftzwdyauwt9/6gugGfSiM1oO6UHxxwnqTk/c7173a5a2c096a8f8a24c258ddfa22dd/ArtCard-TechnicalFoundations.png?w=3840&q=90&fm=webp)\n\n[A shared playbook for trustworthy third party evaluations\\\\\n\\\\\nSafetyMay 29, 2026](https://openai.com/index/trustworthy-third-party-evaluations-foundations/)\n\n![Frontier Governance Framework > card image ](https://images.ctfassets.net/kftzwdyauwt9/2KoiHuErR5YxXGUnhCU8VY/e392c6249ec4644e07e944edea22e837/Frame2.png?w=3840&q=90&fm=webp)\n\n[OpenAI’s Frontier Governance Framework\\\\\n\\\\\nSafetyMay 28, 2026](https://openai.com/index/openai-frontier-governance-framework/)\n\n![Tax Agent > Art Card](https://images.ctfassets.net/kftzwdyauwt9/6ojJ6B55QUlmNdaLifgMkQ/22e429ec7b3fdd119a2499358af899b7/Art_Card.png?w=3840&q=90&fm=webp)\n\n[Building self-improving tax agents with Codex\\\\\n\\\\\nEngineeringMay 27, 2026](https://openai.com/index/building-self-improving-tax-agents-with-codex/)\n\n![Gartner MQ > Art Card](https://images.ctfassets.net/kftzwdyauwt9/6GUkmRON5hyvikNSF3IEmH/78ea7491689ec5d07cd6a6c2ad6f0254/Gartner-MQ-ArtCard.png?w=3840&q=90&fm=webp)\n\n[OpenAI named a Leader in enterprise coding agents by Gartner\\\\\n\\\\\nAI AdoptionMay 22, 2026](https://openai.com/index/gartner-2026-agentic-coding-leader/)\n\n![Geometry > ArtCard > Polynomial Construction](https://images.ctfassets.net/kftzwdyauwt9/6PqehRMmS1oVuin6e3VWYq/b96f1c7b5a2ac2c08a887591b8486ed3/ArtCard-Polynomial-Construction.png?w=3840&q=90&fm=webp)\n\n[An OpenAI model has disproved a central conjecture in discrete geometry\\\\\n\\\\\nResearchMay 20, 2026](https://openai.com/index/model-disproves-discrete-geometry-conjecture/)\n\n![Art card (4)](https://images.ctfassets.net/kftzwdyauwt9/26wgJNYWk0soRoyZvBmYmo/dc80fc33c0a60bd566816f2323f31dc2/Art_card__4_.png?w=3840&q=90&fm=webp)\n\n[Advancing content provenance for a safer, more transparent AI ecosystem\\\\\n\\\\\nSafetyMay 19, 2026](https://openai.com/index/advancing-content-provenance/)\n\n![dell](https://images.ctfassets.net/kftzwdyauwt9/17U8SngLERoATdFhOjWbDK/da377e6850f8241ea7814a347bad0a3a/Frame.png?w=3840&q=90&fm=webp)\n\n[OpenAI and Dell Technologies partner to bring Codex to hybrid and on-premises enterprise environments\\\\\n\\\\\nCompanyMay 18, 2026](https://openai.com/index/dell-codex-enterprise-partnership/)\n\nLoad more"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+services:
+  backend:
+    build:
+      context: ./starter_v0
+      dockerfile: Dockerfile
+    container_name: day4-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - AGENT_API_KEY=dev-key-change-me
+      - RATE_LIMIT_PER_MINUTE=10
+      - DAILY_BUDGET_USD=5.0
+    env_file:
+      - ./starter_v0/.env
+    volumes:
+      - ./starter_v0/artifacts:/app/artifacts
+      - ./starter_v0/runs:/app/runs
+      - ./starter_v0/transcripts:/app/transcripts
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: day4-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
